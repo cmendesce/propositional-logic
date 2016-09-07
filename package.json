@@ -1,0 +1,23 @@
+{
+  "name": "propositional-logic",
+  "version": "0.0.1",
+  "description": "It is a propositional logic analyser",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/jasmine-node/bin/jasmine-node --verbose spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmendesce/propositional-logic.git"
+  },
+  "author": "Carlos Mendes",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cmendesce/propositional-logic/issues"
+  },
+  "homepage": "https://github.com/cmendesce/propositional-logic#readme",
+  "dependencies": {
+    "jasmine": "^2.5.0",
+    "jasmine-node": "^1.14.5"
+  }
+}
