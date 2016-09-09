@@ -1,6 +1,6 @@
 # Propositional Logic Compiler
 
-Tests status [![CircleCI](https://circleci.com/gh/cmendesce/propositional-logic/tree/master.svg?style=svg)](https://circleci.com/gh/cmendesce/propositional-logic/tree/master)
+[![CircleCI](https://circleci.com/gh/cmendesce/propositional-logic/tree/master.svg?style=svg)](https://circleci.com/gh/cmendesce/propositional-logic/tree/master)
 
 This is a small application for compiler expressions written in propositional logic syntax. 
 
