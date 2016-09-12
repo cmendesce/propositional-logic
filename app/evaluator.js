@@ -12,7 +12,7 @@ var ASTType = {
 	BINARY: "BINARY"
 }
 
-exports.getTree = function(exp) {
+exports.asTree = function(exp) {
   const tokens = tokenizer.do(exp)
 	var _current = 0;
 	var last = undefined;
@@ -23,7 +23,7 @@ exports.getTree = function(exp) {
 		_current++
 	}
 
-	return treeify.asTree(last, true)
+	return last
 
 	function identify(tokenItem) {
 		switch(tokenItem.type) {
@@ -31,22 +31,23 @@ exports.getTree = function(exp) {
 				return {
 					type: ASTType.PROP,
 					token: tokenItem
-				};
+				}
 			case token.Type.NOT:
 				return {
 					type: ASTType.UNARY,
 					token: tokenItem,
-					child: identify(tokens[++_current])
-				};
+					children: [identify(tokens[++_current])]
+				}
 			case token.Type.OR:
 			case token.Type.AND:
 			case token.Type.IMPLIES:
-				return {
+				var node = {
 					type: ASTType.BINARY,
 					token: tokenItem,
-					child_left: last,
-					child_right: identify(tokens[++_current])
-				};
+					children: [last]
+				}
+				node.children.push(identify(tokens[++_current]))
+				return node
 			case token.Type.OPEN:
 				var loopAST = undefined;
 				var t = tokens[++_current]
