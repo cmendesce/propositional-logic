@@ -1,22 +1,22 @@
 {
   "name": "propositional-logic",
-  "version": "0.0.1",
-  "description": "It is a propositional logic analyser",
-  "main": "index.js",
+  "version": "0.0.2",
+  "description": "This is a small application for compiler expressions written in propositional logic syntax.",
+  "main": "server.js",
   "scripts": {
     "test": "./node_modules/jasmine-node/bin/jasmine-node --verbose spec",
     "start": "node server"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cmendesce/propositional-logic.git"
+    "url": "git+https://github.com/cmendesce/propositional-logic-compiler.git"
   },
   "author": "Carlos Mendes",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cmendesce/propositional-logic/issues"
+    "url": "https://github.com/cmendesce/propositional-logic-compiler/issues"
   },
-  "homepage": "https://github.com/cmendesce/propositional-logic#readme",
+  "homepage": "https://github.com/cmendesce/propositional-logic-compiler#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
