@@ -1,6 +1,6 @@
 'use strict'
 
-const evaluator = require('./app/evaluator.js')
+const evaluator = require('./app/compiler.js')
     , express = require('express')
     , logger = require('morgan')
     , bodyParser = require('body-parser')
