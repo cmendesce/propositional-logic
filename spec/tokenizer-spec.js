@@ -2,10 +2,10 @@
 
 describe('should tokenizer the expression', function() {
   const token = require('../app/token.js')
-  const tokenizer = require('../app/tokenizer.js')
+      , tokenizer = require('../app/tokenizer.js')
 
   it('(P)', function() {
-    var tokens = tokenizer.do('(P)')
+    var tokens = tokenizer.get('(P)')
     expect(tokens).toEqual([
       {type: token.Type.OPEN, value: '('},
       {type: token.Type.PREMISE, value: 'P'},
@@ -13,7 +13,7 @@ describe('should tokenizer the expression', function() {
     ])
   })
   it('(~P)', function() {
-    var tokens = tokenizer.do('(~P)')
+    var tokens = tokenizer.get('(~P)')
     expect(tokens).toEqual([
       {type: token.Type.OPEN, value: '('},
       {type: token.Type.NOT, value: '~'},

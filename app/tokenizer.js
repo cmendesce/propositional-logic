@@ -3,7 +3,7 @@
 var exports = module.exports = {}
 const token = require('../app/token.js')
 
-exports.do = function(exp) {
+exports.get = function(exp) {
   let tokens = []
 
   for (var i = 0, len = exp.length; i < len; i++) {

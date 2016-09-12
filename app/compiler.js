@@ -1,19 +1,20 @@
 'use strict'
 
-var exports = module.exports = {}
+var exports = module.exports = { }
 
 const token = require('../app/token.js')
-const tokenizer = require('../app/tokenizer.js')
-const treeify = require('treeify')
+		, tokenizer = require('../app/tokenizer.js')
 
-var ASTType = {
+const ASTType = {
 	PROP: "PROP",
 	UNARY: "UNARY",
 	BINARY: "BINARY"
 }
 
-exports.asTree = function(exp) {
-  const tokens = tokenizer.do(exp)
+exports.syntaxTree = syntaxTree
+
+function syntaxTree(exp) {
+  const tokens = tokenizer.get(exp)
 	var _current = 0;
 	var last = undefined;
 
@@ -63,5 +64,4 @@ exports.asTree = function(exp) {
 				return null;
 		}
 	}
-
 }
