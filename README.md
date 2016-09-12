@@ -1,6 +1,6 @@
 # Propositional Logic Compiler
 
-[![CircleCI](https://circleci.com/gh/cmendesce/propositional-logic/tree/master.svg?style=svg)](https://circleci.com/gh/cmendesce/propositional-logic/tree/master)
+[![CircleCI](https://circleci.com/gh/cmendesce/propositional-logic-compiler.svg?style=svg)](https://circleci.com/gh/cmendesce/propositional-logic-compiler)
 
 This is a small application for compiler expressions written in propositional logic syntax. 
 
@@ -15,7 +15,7 @@ It can compile expressions like these
 ```
 Check the spec folder to see all tests and expressions.
 
-
+## The application is running on [Heroku](https://ppgia-compiler.herokuapp.com)
 
 ## License
 Code is under the [MIT Licence](LICENSE).
