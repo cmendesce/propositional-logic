@@ -15,7 +15,7 @@ It can compile expressions like these
 ```
 Check the spec folder to see all tests and expressions.
 
-## The application is running on [Heroku](https://ppgia-compiler.herokuapp.com)
+The application is running on [Heroku](https://ppgia-compiler.herokuapp.com)
 
 ## License
 Code is under the [MIT Licence](LICENSE).
