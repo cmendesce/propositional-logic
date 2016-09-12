@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Propositional Logic Compiler</title>
+    <title>Propositional Logic Interpreter</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <style>
     body {
@@ -24,28 +24,109 @@
     <![endif]-->
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container">
-            <a href="https://github.com/cmendesce/propositional-logic-compiler"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"></a>
-        </div>
-    </nav>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <a href="https://github.com/you"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">Start Bootstrap</a>
+          </div>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                  <li>
+                      <a href="#">About</a>
+                  </li>
+                  <li>
+                      <a href="#">Services</a>
+                  </li>
+                  <li>
+                      <a href="#">Contact</a>
+                  </li>
+              </ul>
+          </div>
+          <!-- /.navbar-collapse -->
+      </div>
+      <!-- /.container -->
+  </nav>
     <div class="container">
+
+
       <div class="jumbotron">
-        <h1>Propositional Logic Compiler</h1>
-        <p>This is a small application for compiler expressions written in propositional logic syntax.</p>
-        <p>Type an expression like <em>(~P)</em> or <em>((A^B)->(AV~B))</em> or <em>(A->(BVC))->(AVB)V(AVC)</em> and get the tree.
+        <h1>Propositional Logic Interpreter</h1>
+        <p>This is a small application for interpreter expressions written in propositional logic syntax.</p>
+        <p>You can type an expression like <em>(~P)</em> or <em>((A^B)->(AV~B))</em> or <em>(A->(BVC))->(AVB)V(AVC)</em> and yoy'll get an tree showing the parts of expressions.
       </div>
 
-      <form class="form-inline" action="/evaluate" method="post">
+
         <div class="form-group">
-          <input type="text" class="form-control input-lg" placeholder="type an expression">
+          <input type="text" id="expressionText" class="form-control input-lg" placeholder="type an expression">
         </div>
-        <button type="submit" class="btn btn-default btn-lg">Evaluate</button>
-      </form>
+        <button class="btn btn-default btn-lg" id="btnEvaluate">Evaluate</button>
+<div id="chart_div"></div>
 
       </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="evaluator.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {packages:["orgchart"]})
+      $('#btnEvaluate').on('click', evaluate)
+
+      function draw(parent) {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Node');
+        data.addColumn('string', 'Parent');
+
+        deep(data, parent);
+        var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
+        chart.draw(data, {allowHtml:true});
+      }
+
+      var index = 0;
+
+      function deep(data, node) {
+        const parent = tokenString(node.token, index)
+        let row = [parent, '']
+        data.addRows([row])
+
+        if (!!node.children) {
+          node.children.forEach(child => {
+
+            index++
+            let row = [tokenString(child.token, index), parent]
+
+            data.addRows([row])
+            if (!!child.children) {
+              deep(data, child, index)
+            }
+          })
+        }
+
+      }
+
+      function tokenString(token, index) {
+        return '('+index+')' + token.type + ' ' + token.value
+      }
+
+
+      function evaluate() {
+        const expression = $(expressionText).val()
+        $.post('/evaluate', {{"expression":"((A^B)->(AV~B))"}}, data => {
+          console.log(data)
+          draw(data)
+        })
+      }
+    </script>
 </body>
 </html>
