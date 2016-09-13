@@ -7,7 +7,7 @@ describe('should create token from char', function() {
     expect(t.type).toBe(token.Type.AND)
   })
   it('or', function() {
-    const t = token.create('V')
+    const t = token.create('v')
     expect(t.type).toBe(token.Type.OR)
   })
   it('not', function() {

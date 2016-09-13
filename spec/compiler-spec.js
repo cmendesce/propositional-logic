@@ -38,41 +38,41 @@ describe('should evaluate logic expression', function() {
   })
 
   describe('simple w/ 1 implies', function() {
-    it('(a->b)', function() {
+    it('(A->B)', function() {
 
     })
-    it('(a->~b)', function() {
+    it('(A->~B)', function() {
 
     })
-    it('(~a->b)', function() {
+    it('(~A->B)', function() {
 
     })
-    it('(~a->~b)', function() {
+    it('(~A->~B)', function() {
 
     })
   })
 
   describe('binary on the left', function() {
-    it('((a^b)->(avb))', function() {
+    it('((A^B)->(AvB))', function() {
 
     })
-    it('(~(a^b)->(a^~b))', function() {
+    it('(~(A^B)->(A^~B))', function() {
 
     })
-    it('(~(a^b)->~(a^b))', function() {
+    it('(~(A^B)->~(A^B))', function() {
 
     })
   })
 
   describe('full expressions', function() {
-    it('(~(pVq)->(~p^~q))', function() {
+    it('(~(PvQ)->(~P^~Q))', function() {
 
     })
 
-    it('(a->(bVc))->(aVb)V(aVc)', function() {
+    it('((A->(BvC))->(AvB)v(AvC))', function() {
 
     })
-    it('(((˜(P^Q))^P) -> (˜Q))', function() {
+    it('(((~(P^Q))^P) -> (~Q))', function() {
 
     })
   })

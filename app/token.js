@@ -27,7 +27,7 @@ exports.create = function(part) {
     case '^':
       type = tokenType.AND
       break;
-    case 'V':
+    case 'v':
       type = tokenType.OR
       break;
     case '~':
