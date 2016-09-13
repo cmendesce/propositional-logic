@@ -15,8 +15,8 @@ exports.syntaxTree = syntaxTree
 
 function syntaxTree(exp) {
   const tokens = tokenizer.get(exp)
-	var _current = 0;
-	var last = undefined;
+	var _current = 0
+	var last = undefined
 
 	while (_current < tokens.length) {
 		var t = tokens[_current]
@@ -50,16 +50,14 @@ function syntaxTree(exp) {
 				node.children.push(identify(tokens[++_current]))
 				return node
 			case token.Type.OPEN:
-				var loopAST = undefined;
-				var t = tokens[++_current]
-				var c = identify(t)
-				while ( c != null ) {
-					loopAST = c
-					last = c
-					t = tokens[++_current]
-					c = identify(t)
+				var node
+					, currentNode = identify(tokens[++_current])
+				while (currentNode !== null) {
+					node = currentNode
+					last = currentNode
+					currentNode = identify(tokens[++_current])
 				}
-				return loopAST;
+				return node
 			case token.Type.CLOSE:
 				return null;
 		}
