@@ -81,45 +81,43 @@
       $('#btnEvaluate').on('click', evaluate)
 
       function draw(parent) {
-        var data = new google.visualization.DataTable()
-        data.addColumn('string', 'Node')
-        data.addColumn('string', 'Parent')
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Node');
+        data.addColumn('string', 'Parent');
 
-        deep(data, parent)
-        var chart = new google.visualization.OrgChart(document.getElementById('chart_div'))
-        chart.draw(data)
-        $('#containerChart').show()
+        deep(data, parent);
+        var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
+        chart.draw(data);
+        $('#containerChart').show();
       }
 
-
-
       function deep(data, node) {
-        const parent = tokenString(node.token, index)
-        let row = [parent, '']
-        data.addRows([row])
+        var parent = tokenString(node.token, index);
+        var row = [parent, ''];
+        data.addRows([row]);
 
         if (!!node.children) {
-          node.children.forEach(child => {
-            index++
-            let row = [tokenString(child.token, index), parent]
 
-            data.addRows([row])
+          for (var i = 0; i < node.children.length; i++) {
+            index++;
+            var child = node.children[i];
+
+            var row = [tokenString(child.token, index), parent]
+            data.addRows([row]);
             if (!!child.children) {
-              deep(data, child, index)
+              deep(data, child, index);
             }
-          })
+          }
         }
-
       }
 
       function tokenString(token, index) {
-        return '('+index+') ' + token.type + ' ' + token.value
+        return '('+index+') ' + token.type + ' ' + token.value;
       }
 
-
       function evaluate() {
-        index = 0
-        const expression = $(expressionText).val()
+        index = 0;
+        var expression = $(expressionText).val();
         $.ajax({
           type: "POST",
           url: '/evaluate',
@@ -129,7 +127,7 @@
           success: function(data) {
             $('#expressionTitle').text(expression)
             draw(data)
-          },
+          }
         });
       }
     </script>
