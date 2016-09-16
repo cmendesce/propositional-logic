@@ -10,9 +10,9 @@ exports.get = function(exp) {
     const char = exp[i]
 		var t;
 		if (char === '-') {
-			t = token.create(char + exp[i+1])
+			t = token.from(char + exp[i+1])
 		} else {
-			t = token.create(char)
+			t = token.from(char)
 		}
 		if (!!t) tokens.push(t)
   }

@@ -1,41 +1,44 @@
-"use strict"
+'use strict'
 
-describe('should create token from char', function() {
+
+describe('Token: should from token from char', function() {
   const token = require('../app/token.js')
+  const tokenType = require('../app/tokenType.js').Type
+
   it('and', function() {
-    const t = token.create('^')
-    expect(t.type).toBe(token.Type.AND)
+    const t = token.from('^')
+    expect(t.type).toBe(tokenType.AND)
   })
   it('or', function() {
-    const t = token.create('v')
-    expect(t.type).toBe(token.Type.OR)
+    const t = token.from('v')
+    expect(t.type).toBe(tokenType.OR)
   })
   it('not', function() {
-    const t = token.create('~')
-    expect(t.type).toBe(token.Type.NOT)
+    const t = token.from('~')
+    expect(t.type).toBe(tokenType.NOT)
   })
   it('open', function() {
-    const t = token.create('(')
-    expect(t.type).toBe(token.Type.OPEN)
+    const t = token.from('(')
+    expect(t.type).toBe(tokenType.OPEN)
   })
   it('clone', function() {
-    const t = token.create(')')
-    expect(t.type).toBe(token.Type.CLOSE)
+    const t = token.from(')')
+    expect(t.type).toBe(tokenType.CLOSE)
   })
   it('implies', function() {
-    const t = token.create('->')
-    expect(t.type).toBe(token.Type.IMPLIES)
+    const t = token.from('->')
+    expect(t.type).toBe(tokenType.IMPLIES)
   })
   it('premise', function() {
-    const t = token.create('A')
-    expect(t.type).toBe(token.Type.PREMISE)
+    const t = token.from('A')
+    expect(t.type).toBe(tokenType.PREMISE)
   })
   it('double premise', function() {
-    const t = token.create('AB')
-    expect(t.type).toBe(token.Type.PREMISE)
+    const t = token.from('AB')
+    expect(t.type).toBe(tokenType.PREMISE)
   })
   it('invalid token', function() {
-    const t = token.create('&')
+    const t = token.from('&')
     expect(t).toBeUndefined()
   })
 })

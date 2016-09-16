@@ -1,24 +1,25 @@
-"use strict"
+'use strict'
 
-describe('should tokenizer the expression', function() {
+describe('Tokenizer: should tokenizer the expression', function() {
   const token = require('../app/token.js')
+      , tokenType = require('../app/tokenType.js').Type
       , tokenizer = require('../app/tokenizer.js')
 
   it('(P)', function() {
     var tokens = tokenizer.get('(P)')
     expect(tokens).toEqual([
-      {type: token.Type.OPEN, value: '('},
-      {type: token.Type.PREMISE, value: 'P'},
-      {type: token.Type.CLOSE, value: ')'}
+      {type: tokenType.OPEN, value: '('},
+      {type: tokenType.PREMISE, value: 'P'},
+      {type: tokenType.CLOSE, value: ')'}
     ])
   })
   it('(~P)', function() {
     var tokens = tokenizer.get('(~P)')
     expect(tokens).toEqual([
-      {type: token.Type.OPEN, value: '('},
-      {type: token.Type.NOT, value: '~'},
-      {type: token.Type.PREMISE, value: 'P'},
-      {type: token.Type.CLOSE, value: ')'}
+      {type: tokenType.OPEN, value: '('},
+      {type: tokenType.NOT, value: '~'},
+      {type: tokenType.PREMISE, value: 'P'},
+      {type: tokenType.CLOSE, value: ')'}
     ])
   })
 })
