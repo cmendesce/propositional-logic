@@ -11,6 +11,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <style>
     body {padding-top: 70px;}
+    table {border-collapse: initial;}
     </style>
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -119,14 +120,17 @@
         index = 0;
         var expression = $(expressionText).val();
         $.ajax({
-          type: "POST",
-          url: '/evaluate',
-          data: JSON.stringify({'expression':expression}),
-          contentType: 'application/json; charset=UTF-8',
+          type: 'GET',
+          url: '/ast/' + expression,
           dataType: 'json',
           success: function(data) {
-            $('#expressionTitle').text(expression)
-            draw(data)
+            $('#expressionTitle').text(expression);
+            draw(data);
+          },
+          error: function() {
+            $('#expressionTitle').text(expression);
+            $('#containerChart').show();
+            $('#chart_div').html('<p>Wrong expression</p>');
           }
         });
       }

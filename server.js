@@ -1,6 +1,6 @@
 'use strict'
 
-const compiler = require('./app/compiler.js')
+const ast = require('./app/ast.js')
     , express = require('express')
     , logger = require('morgan')
     , bodyParser = require('body-parser')
@@ -18,10 +18,10 @@ app.get('/about', function (req, res) {
   res.sendFile('/public/about.html', {root: __dirname })
 })
 
-app.post('/evaluate', function(request, response) {
-  const expression = request.body.expression
-  console.log('evaluating the expression --->', expression)
-  const tree = compiler.syntaxTree(expression)
+app.get('/ast/:expression', function(request, response) {
+  const expression = request.params.expression
+  console.log('generating ast for expression --->', expression)
+  const tree = ast.get(expression)
 
   response.status(200).set('Content-Type', 'application/json').send(tree)
 })

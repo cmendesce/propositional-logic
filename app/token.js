@@ -1,22 +1,12 @@
 'use strict'
 
-var exports = module.exports = {}
+var exports = module.exports = { }
 
-const tokenType = {
-  OPEN: 'OPEN',
-  CLOSE: 'CLOSE',
-  NOT: 'NOT',
-  AND: 'AND',
-  OR: 'OR',
-  IMPLIES: 'IMPLIES',
-  PREMISE: 'PREMISE'
-}
+const tokenType = require('../app/tokenType.js').Type
 
-exports.Type = tokenType
+exports.from = function(part) {
+  let type
 
-exports.create = function(part) {
-  let type;
-  let value = part;
   switch (part) {
     case '(':
       type = tokenType.OPEN
@@ -34,7 +24,6 @@ exports.create = function(part) {
       type = tokenType.NOT
       break;
     case '->':
-      value = '\u2192'
       type = tokenType.IMPLIES
       break;
     default:
@@ -47,7 +36,7 @@ exports.create = function(part) {
     } else {
       return {
         type: type,
-        value: value
+        value: part
       }
     }
 }
