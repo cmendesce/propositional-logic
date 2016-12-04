@@ -9,8 +9,15 @@ const astType = require('../app/astType.js').AstType
 const convert = (exp) => {
 	const root = ast.get(exp)
 
+	const noImplies = removeImplies(root);
+	const fixedNegations = fixNegations(noImplies);
+	
+	return fixedNegations;
+};
+
+const removeImplies = (root) => {
 	/*
-	passo1: elimine o conectivo → usando: 
+	passo 1: elimine o conectivo → usando: 
 		 α → β ≡ (¬α ∨ β)
 		¬(α → β) ≡ (α ∧ ¬β)
 	*/
@@ -22,7 +29,7 @@ const convert = (exp) => {
 				return or(not(left), right)
 		}
 	} else {
-		if (!!root.children && root.children.length > 0) {
+		if (hasChildren(root.children)) {
 			
 			if (root.children[0].token.type === tokenType.IMPLIES) { // ~(A x B)	
 				const left = root.children[0].children[0]
@@ -33,7 +40,45 @@ const convert = (exp) => {
 		}
 		return root;
 	}
+}
+
+const fixNegations = (root) => {
+	/*
+	passo 2: mova a negação (¬) para o interior 
+		¬¬α ≡ α
+		¬(α ∧ β) ≡ (¬α ∨ ¬β)
+		¬(α ∨ β) ≡ (¬α ∧ ¬β)
+	*/
+
+	if (root.type === astType.UNARY) {
+		 if (hasChildren(root.children) && root.children.length == 1) { //¬¬α ≡ α
+			 if (root.children[0].token.type === tokenType.NOT) {
+			 	return root.children[0].children[0];
+			 }
+
+			 if (root.children[0].token.type === tokenType.AND) { // ¬(α ∧ β) ≡ (¬α ∨ ¬β)
+				 const left = root.children[0].children[0]
+				 const right = root.children[0].children[1]
+				 return or(not(left), not(right))
+			 }
+
+			 if (root.children[0].token.type === tokenType.OR) { // ¬(α ∨ β) ≡ (¬α ∧ ¬β)
+				 const left = root.children[0].children[0]
+				 const right = root.children[0].children[1]
+				 return and(not(left), not(right))
+			 }
+		 }
+
+	}
+
+
+	
+
+
+	return root;
 };
+
+const hasChildren = (children) => !!children && children.length > 0
 
 const not = (exp) => {
 	return {

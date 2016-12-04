@@ -61,4 +61,18 @@ describe('CNF: ', () => {
       expect(cnf.convert('~(A -> B)')).toEqual(ast.get('(A ^ ~B)'))
     })
   })
+
+  describe('Fix negations', () => {
+    it('~(~A) should be A', () => {
+      expect(cnf.convert('~(~A)')).toEqual(ast.get('A'))
+    })
+
+    it('~(A ^ B) should be (~A v ~B)', () => {
+      expect(cnf.convert('~(A ^ B)')).toEqual(ast.get('(~A v ~B)'))
+    })
+
+    it('~(A v B) should be (~A ^ ~B)', () => {
+      expect(cnf.convert('~(A v B)')).toEqual(ast.get('(~A ^ ~B)'))
+    })
+  })
 })
