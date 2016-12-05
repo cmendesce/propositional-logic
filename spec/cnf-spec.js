@@ -20,59 +20,80 @@ describe('CNF: ', () => {
   const tokenType = require('../app/tokenType').Type
   const astType = require('../app/astType').AstType
   const cnf = require('../app/cnf')
-  const ast = require('../app/ast')
-
-  
+  const ast = require('../app/ast').get
 
   describe('Basic', () => {
-    
     it('P should be P', () => {
-      const expected = {
-        type: astType.PROP,
-        token: {type: tokenType.PREMISE, value: 'P'}
-      }
-      expect(cnf.convert('(P)')).toEqual(expected)
+      expect(cnf.convert(ast('(P)'))).toEqual(ast('(P)'))
     })
-
-    it('(~P) should be (~P)', () => {
-      const expected = {
-        type: astType.UNARY,
-        token: {type: tokenType.NOT, value: '~'},
-        children: [
-          { type: astType.PROP,
-            token: {type: tokenType.PREMISE, value: 'P'}
-          }
-        ]
-      }
-      expect(cnf.convert('(~P)')).toEqual(expected)
+    it('(P ^ Q) should be (P ^ Q)', () => {
+      expect(cnf.convert(ast('(P ^ Q)'))).toEqual(ast('(P ^ Q)'))
+    })
+    it('(P ^ Q) v (A ^ B) should be (P ^ Q) v (A ^ B)', () => {
+      expect(cnf.convert(ast('(P ^ Q) v (A ^ B)'))).toEqual(ast('(P ^ Q) v (A ^ B)'))
     })
   })
 
   describe('Remove implies', () => {
     it('(A -> B) should be ((~A) v B)', () => {
-      expect(cnf.convert('(A -> B)')).toEqual(ast.get('(~A v B)'))
+      expect(cnf.removeImplies(ast('(A -> B)'))).toEqual(ast('(~A v B)'))
     })
 
     it('((A v C ^ D) -> (B ^ A)) should be (~(A v C ^ D) v (B ^ A))', () => {
-      expect(cnf.convert('(A -> B)')).toEqual(ast.get('(~A v B)'))
+      expect(cnf.removeImplies(ast('(A -> B)'))).toEqual(ast('(~A v B)'))
     })
 
     it('(~(A -> B)) should be (A ^ ~B)', () => {
-      expect(cnf.convert('~(A -> B)')).toEqual(ast.get('(A ^ ~B)'))
+      expect(cnf.removeImplies(ast('~(A -> B)'))).toEqual(ast('(A ^ ~B)'))
     })
+
+    it ('(A ∨ B) -> C should be (~(A v B) v C)', () => {
+      expect(cnf.removeImplies(ast('((A v B) -> C)'))).toEqual(ast('(~(A v B) v C)'))
+    })
+
+    it ('((P -> Q) v (P -> R)) should be ((~P v Q) v (~P v R))', () => {
+      expect(cnf.removeImplies(ast('((P -> Q) v (P -> R))'))).toEqual(ast('((~P v Q) v (~P v R))'))
+    })
+    
+    it ('((P -> Q) ^ (P -> R)) should be ((~P v Q) ^ (~P v R))', () => {
+      expect(cnf.removeImplies(ast('((P -> Q) ^ (P -> R))'))).toEqual(ast('((~P v Q) ^ (~P v R))'))
+    })
+
+    it ('((P -> Q) -> (P -> R)) should be (~(~P v Q) v (~P v R))', () => {
+      expect(cnf.removeImplies(ast('((P -> Q) -> (P -> R))'))).toEqual(ast('(~(~P v Q) v (~P v R))'))
+    })
+
+    // it ('(~(P -> Q) -> (P -> R)) should be ((~P v Q) ^ ~(~P v R))', () => {
+    //   expect(cnf.removeImplies(ast('(~(P -> Q) -> (P -> R))'))).toEqual(ast('((~P v Q) ^ ~(~P v R))'))
+    // })
   })
 
   describe('Fix negations', () => {
+
+    it('(~P) should be (~P)', () => {
+      expect(cnf.fixNegations(ast('(~P)'))).toEqual(ast('~(P)'))
+    })
+
     it('~(~A) should be A', () => {
-      expect(cnf.convert('~(~A)')).toEqual(ast.get('A'))
+      expect(cnf.fixNegations(ast('~(~A)'))).toEqual(ast('A'))
     })
 
-    it('~(A ^ B) should be (~A v ~B)', () => {
-      expect(cnf.convert('~(A ^ B)')).toEqual(ast.get('(~A v ~B)'))
+    it('~(~P v Q) should be (P v (~Q))', () => {
+      expect(cnf.fixNegations(ast('~(~P v Q)'))).toEqual(ast('(P v (~Q))'))
     })
 
-    it('~(A v B) should be (~A ^ ~B)', () => {
-      expect(cnf.convert('~(A v B)')).toEqual(ast.get('(~A ^ ~B)'))
+    describe('De Morgan`s laws', () => {
+      it('~(A ^ B) should be (~A v ~B)', () => {
+        expect(cnf.fixNegations(ast('~(A ^ B)'))).toEqual(ast('(~A v ~B)'))
+      })
+
+      it('~(A v B) should be (~A ^ ~B)', () => {
+        expect(cnf.fixNegations(ast('~(A v B)'))).toEqual(ast('(~A ^ ~B)'))
+      })
     })
   })
+
+  const assert = (actual, expected) => {
+    expect(cnf.convert(ast('~(A v B)'))).toEqual(ast('(~A ^ ~B)'))
+  }
 })

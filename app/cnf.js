@@ -1,114 +1,105 @@
 'use strict'
 
 
-const token = require('../app/token.js')
-const tokenType = require('../app/tokenType').Type
-const ast = require('../app/ast.js')
-const astType = require('../app/astType.js').AstType
+const token = require('../app/token'), 
+	tokenType = require('../app/tokenType').Type, 
+	ast = require('../app/ast.js'), 
+	astType = require('../app/astType').AstType,
+	formula = require('../app/formula'),
+	or = formula.or, 
+	and = formula.and,
+	not = formula.not;
 
 const convert = (exp) => {
 	const root = ast.get(exp)
 
-	const noImplies = removeImplies(root);
+	const noImplies = removeImplies(exp);
 	const fixedNegations = fixNegations(noImplies);
 	
 	return fixedNegations;
 };
 
+//passo 1 
 const removeImplies = (root) => {
-	/*
-	passo 1: elimine o conectivo → usando: 
-		 α → β ≡ (¬α ∨ β)
-		¬(α → β) ≡ (α ∧ ¬β)
-	*/
-	if (root.type === astType.BINARY) {
-		const left = root.children[0]
-		const right = root.children[1]
+	if (!root) return root;
 
+	if (root.type === astType.BINARY) {
+		
 		if (root.token.type === tokenType.IMPLIES) {
-				return or(not(left), right)
+			const a = removeImplies(root.children[0])
+			const b = removeImplies(root.children[1])
+			return or(not(a), b)
+
+		} else {
+			root.children[0] = removeImplies(root.children[0])
+			root.children[1] = removeImplies(root.children[1])
+			return root
 		}
 	} else {
-		if (hasChildren(root.children)) {
-			
-			if (root.children[0].token.type === tokenType.IMPLIES) { // ~(A x B)	
-				const left = root.children[0].children[0]
-				const right = root.children[0].children[1]
+		if (has(root.children) && root.token.type === tokenType.NOT) { // ~(A -> B)
+			const nodeNot = root.children[0]
+			if (nodeNot.token.type === tokenType.IMPLIES) {
 
-				return and(left, not(right));
+				const a = removeImplies(nodeNot.children[0])
+				const b = removeImplies(nodeNot.children[1])
+				return and(a, not(b))
+
+			} else if (has(nodeNot.children)) { 
+				nodeNot.children[0] = removeImplies(nodeNot.children[0])
+				nodeNot.children[1] = removeImplies(nodeNot.children[1])
+				root.children[0] = nodeNot
+				return root
 			}
 		}
 		return root;
 	}
-}
+};
 
+// passo 2
 const fixNegations = (root) => {
-	/*
-	passo 2: mova a negação (¬) para o interior 
-		¬¬α ≡ α
-		¬(α ∧ β) ≡ (¬α ∨ ¬β)
-		¬(α ∨ β) ≡ (¬α ∧ ¬β)
-	*/
 
 	if (root.type === astType.UNARY) {
-		 if (hasChildren(root.children) && root.children.length == 1) { //¬¬α ≡ α
-			 if (root.children[0].token.type === tokenType.NOT) {
-			 	return root.children[0].children[0];
-			 }
+		if (has(root.children) && root.children.length == 1) {
+			const child = root.children[0];
 
-			 if (root.children[0].token.type === tokenType.AND) { // ¬(α ∧ β) ≡ (¬α ∨ ¬β)
-				 const left = root.children[0].children[0]
-				 const right = root.children[0].children[1]
-				 return or(not(left), not(right))
-			 }
+			if (child.token.type === tokenType.NOT) { //¬¬α ≡ α
+				return child.children[0];
+			}
 
-			 if (root.children[0].token.type === tokenType.OR) { // ¬(α ∨ β) ≡ (¬α ∧ ¬β)
-				 const left = root.children[0].children[0]
-				 const right = root.children[0].children[1]
-				 return and(not(left), not(right))
-			 }
-		 }
+			if (child.type === astType.BINARY && 
+				child.children[0].token.type === tokenType.NOT) { // ~(~P x Q)
+					const a = child.children[0].children[0]
+					const b = child.children[1]
+					let conector = child.type === astType.AND ? and : or
+					return conector(a, not(b))
+			}
 
+			if (child.token.type === tokenType.AND) { // ¬(α ∧ β) ≡ (¬α ∨ ¬β)
+				const left = child.children[0]
+				const right = child.children[1]
+				return or(not(left), not(right))
+			}
+
+			if (child.token.type === tokenType.OR) { // ¬(α ∨ β) ≡ (¬α ∧ ¬β)
+			 	const left = child.children[0]
+			 	const right = child.children[1]
+				return and(not(left), not(right))
+			}
+
+			
+		}
 	}
-
-
-	
-
 
 	return root;
 };
 
-const hasChildren = (children) => !!children && children.length > 0
+const has = (children) => !!children && children.length > 0
 
-const not = (exp) => {
-	return {
-		type: astType.UNARY,
-		token: {type: tokenType.NOT, value: '~'},
-		children: [exp]
-	}
+module.exports = {
+	convert: convert,
+	removeImplies: removeImplies, 
+	fixNegations: fixNegations
 }
-
-const or = (left, right) => {
-	return {
-		type: astType.BINARY,
-    token: {type: tokenType.OR, value: 'v'},
-    children: [left, right]
-	};
-}
-
-const and = (left, right) => {
-	return {
-		type: astType.BINARY,
-    token: {type: tokenType.AND, value: '^'},
-    children: [left, right]
-	};
-}
-
-module.exports = {convert:convert};
-
-//console.log(JSON.stringify(convert('(A -> B)')))
-
-
 
 /*
 passo1: elimine o conectivo → usando: 
@@ -126,33 +117,4 @@ passo3: mova as conjunções para o exterior da fórmula usando:
 
 Exemplo:
 (A∨B)→C⇒ passo1 ⇒¬(A∨B)∨C⇒ passo2 ⇒ (¬A∧¬B)∨C ⇒ passo3 ⇒(¬A∨C)∧(¬B∨C)FNC
-
-
-public static Formula fixNegations (Formula f) { //Move negations in (until we have none)
-		if (f instanceof NotFormula) { //NOT
-			if (((NotFormula) f).p instanceof NotFormula) { //NOT NOT
-				return fixNegations(((NotFormula)((NotFormula) f).p).p);
-			}
-			else if (((NotFormula) f).p instanceof AndFormula) { //NOT AND
-				return new OrFormula(fixNegations(new NotFormula(((AndFormula)((NotFormula) f).p).p)), fixNegations(new NotFormula(((AndFormula)((NotFormula) f).p).q)));
-			}
-			else if (((NotFormula) f).p instanceof OrFormula) { //NOT OR
-				return new AndFormula(fixNegations(new NotFormula(((OrFormula)((NotFormula) f).p).p)), fixNegations(new NotFormula(((OrFormula)((NotFormula) f).p).q)));
-			}
-			else if (((NotFormula)f).p instanceof BoolFormula) { //NOT CONST
-				return new BoolFormula(!((BoolFormula)((NotFormula)f).p).b);
-			}
-			else { //NOT VAR
-				return fixNegations(((NotFormula)f).p);
-			}
-		}
-		else if (f instanceof AndFormula) {
-			return new AndFormula (fixNegations(((AndFormula)f).p), fixNegations(((AndFormula)f).q));
-		}
-		else if (f instanceof OrFormula) {
-			return new OrFormula (fixNegations(((OrFormula)f).p), fixNegations(((OrFormula)f).q));
-		}
-		else { // VAR or CONST
-			return f;
-		}
-	}*/
+*/
