@@ -74,7 +74,7 @@ const fixNegations = (root) => {
 				child.children[0].token.type === tokenType.NOT) { // ~(~P x Q)
 					const a = child.children[0].children[0]
 					const b = child.children[1]
-					let conector = child.type === astType.AND ? and : or
+					const conector = child.token.type === tokenType.AND ? or : and
 					return conector(a, not(b))
 			}
 
@@ -89,8 +89,6 @@ const fixNegations = (root) => {
 			 	const right = child.children[1]
 				return and(not(left), not(right))
 			}
-
-			
 		}
 	}
 
