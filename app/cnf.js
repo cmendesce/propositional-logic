@@ -11,6 +11,8 @@ const token = require('../app/token'),
 	not = formula.not;
 
 const convert = (exp) => {
+	if (!exp) return null
+
 	const root = ast.get(exp)
 
 	const noImplies = removeImplies(exp);
@@ -21,7 +23,7 @@ const convert = (exp) => {
 
 //passo 1 
 const removeImplies = (root) => {
-	if (!root) return root;
+	if (!root) return null;
 
 	if (root.type === astType.BINARY) {
 		
@@ -58,6 +60,8 @@ const removeImplies = (root) => {
 // passo 2
 const fixNegations = (root) => {
 
+	if (!root) return null
+
 	if (root.type === astType.UNARY) {
 		if (has(root.children) && root.children.length == 1) {
 			const child = root.children[0];
@@ -93,12 +97,17 @@ const fixNegations = (root) => {
 	return root;
 };
 
+const distribute = (exp) => {
+	if (!exp) return null	
+}
+
 const has = (children) => !!children && children.length > 0
 
 module.exports = {
 	convert: convert,
 	removeImplies: removeImplies, 
-	fixNegations: fixNegations
+	fixNegations: fixNegations,
+	distribute: distribute
 }
 
 /*

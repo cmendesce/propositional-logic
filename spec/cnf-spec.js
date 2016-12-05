@@ -13,7 +13,7 @@ passo3: mova as conjunções para o exterior da fórmula usando:
 (α ∧ β) ∨ γ ≡ (α ∨ γ) ∧ (β ∨ γ)
 */
 
-'use strict'  
+'use strict'
 
 describe('CNF: ', () => {
   const token = require('../app/token')
@@ -31,6 +31,13 @@ describe('CNF: ', () => {
     })
     it('(P ^ Q) v (A ^ B) should be (P ^ Q) v (A ^ B)', () => {
       expect(cnf.convert(ast('(P ^ Q) v (A ^ B)'))).toEqual(ast('(P ^ Q) v (A ^ B)'))
+    })
+
+    it('null', () => {
+      expect(cnf.convert(undefined)).toBeNull()
+      expect(cnf.removeImplies(undefined)).toBeNull()
+      expect(cnf.fixNegations(undefined)).toBeNull()
+      expect(cnf.distribute(undefined)).toBeNull()
     })
   })
 
@@ -91,6 +98,10 @@ describe('CNF: ', () => {
         expect(cnf.fixNegations(ast('~(A v B)'))).toEqual(ast('(~A ^ ~B)'))
       })
     })
+  })
+
+  describe('Distribute', () => {
+
   })
 
   const assert = (actual, expected) => {
