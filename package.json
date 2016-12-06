@@ -24,5 +24,8 @@
     "jasmine-node": "^1.14.5",
     "morgan": "^1.7.0",
     "nodemon": "^1.10.2"
+  },
+  "devDependencies": {
+    "eslint": "^3.11.1"
   }
 }
