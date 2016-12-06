@@ -93,6 +93,26 @@ describe('CNF: ', () => {
       expect(cnf.fixNegations(ast('~(~P ^ Q)'))).toEqual(ast('(P v (~Q))'))
     })
 
+    it('(~(A v B) v C) should be ((~A ^ ~B) v C)', () => {
+      expect(cnf.fixNegations(ast('(~(A v B) v C)'))).toEqual(ast('((~A ^ ~B) v C)'))
+    })
+
+    it('(~(A v B) v ~(P v Q)) should be ((~A ^ ~B) v (~P ^ ~Q))', () => {
+      expect(cnf.fixNegations(ast('(~(A v B) v ~(P v Q))'))).toEqual(ast('((~A ^ ~B) v (~P ^ ~Q))'))
+    })
+
+    // it('(~(A ^ B) v C) should be ', () => {
+    //   expect(cnf.fixNegations(ast('(~(A ^ B) v C)'))).toEqual(ast(''))
+    // })
+
+    // it('(~(A v B) ^ C) should be ', () => {
+    //   expect(cnf.fixNegations(ast('(~(A v B) ^ C)'))).toEqual(ast(''))
+    // })
+
+    // it('(~(A ^ B) ^ C) should be ', () => {
+    //   expect(cnf.fixNegations(ast('(~(A ^ B) ^ C)'))).toEqual(ast(''))
+    // })
+
     describe('De Morgan`s laws', () => {
       it('~(A ^ B) should be (~A v ~B)', () => {
         expect(cnf.fixNegations(ast('~(A ^ B)'))).toEqual(ast('(~A v ~B)'))

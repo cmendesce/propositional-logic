@@ -64,7 +64,7 @@ const fixNegations = (root) => {
 
 	if (root.type === astType.UNARY) {
 		if (has(root.children) && root.children.length == 1) {
-			const child = root.children[0];
+			const child = root.children[0]
 
 			if (child.token.type === tokenType.NOT) { //¬¬α ≡ α
 				return child.children[0];
@@ -90,9 +90,21 @@ const fixNegations = (root) => {
 				return and(not(left), not(right))
 			}
 		}
+	} else if (has(root.children)) {
+		if (root.children[0].token.type === tokenType.NOT && 
+			root.children[0].children[0].type === astType.BINARY) {
+			root.children[0] = fixNegations(root.children[0])
+		}
+		
+		if (root.children.length === 2 &&
+			root.children[1].token.type === tokenType.NOT && 
+			root.children[1].children[0].type === astType.BINARY) {	
+			root.children[1] = fixNegations(root.children[1])
+		}
+		return root
 	}
 
-	return root;
+	return root
 };
 
 const distribute = (exp) => {
@@ -113,14 +125,14 @@ passo1: elimine o conectivo → usando:
 α → β ≡ (¬α ∨ β)
 ¬(α → β) ≡ (α ∧ ¬β)
 
-passo 2: mova a negação (¬) para o interior da fórmula, usando as seguintes regras: ¬¬α ≡ α
+passo 2: mova a negação (¬) para o interior da fórmula, usando as seguintes regras: 
+¬¬α ≡ α
 ¬(α ∧ β) ≡ (¬α ∨ ¬β)
 ¬(α ∨ β) ≡ (¬α ∧ ¬β)
 
 passo3: mova as conjunções para o exterior da fórmula usando:
 α ∨ (β ∧ γ) ≡ (α ∨ β) ∧ (α ∨ γ)
 (α ∧ β) ∨ γ ≡ (α ∨ γ) ∧ (β ∨ γ)
-
 
 Exemplo:
 (A∨B)→C⇒ passo1 ⇒¬(A∨B)∨C⇒ passo2 ⇒ (¬A∧¬B)∨C ⇒ passo3 ⇒(¬A∨C)∧(¬B∨C)FNC
