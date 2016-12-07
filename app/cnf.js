@@ -107,8 +107,23 @@ const fixNegations = (root) => {
 	return root
 };
 
-const distribute = (exp) => {
-	if (!exp) return null	
+const distribute = (root) => {
+	if (!root) return null
+
+	if (root.token.type === tokenType.OR) {
+		const a = root.children[0]
+		const b = root.children[1]
+
+		if (a.type === astType.PROP && b.token.type === tokenType.AND) { // * v (P ^ Q)
+			const conjunction = b.children
+			return and(or(a, conjunction[0]), or(a, conjunction[1]))
+		} else if (a.token.type === tokenType.AND && b.type === astType.PROP) {
+			const conjunction = a.children
+			return and(or(conjunction[0], b), or(conjunction[1], b))
+		}
+	}
+	
+	return root;
 }
 
 const has = (children) => !!children && children.length > 0

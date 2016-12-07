@@ -9,8 +9,10 @@ passo 2: mova a negação (¬) para o interior da fórmula, usando as seguint
 ¬(α ∨ β) ≡ (¬α ∧ ¬β)
 
 passo3: mova as conjunções para o exterior da fórmula usando:
+
 α ∨ (β ∧ γ) ≡ (α ∨ β) ∧ (α ∨ γ)
 (α ∧ β) ∨ γ ≡ (α ∨ γ) ∧ (β ∨ γ)
+
 */
 
 'use strict'
@@ -144,6 +146,13 @@ describe('CNF: ', () => {
 
   describe('Distribute', () => {
 
+    it('(A v (B ^ C)) should be ((A v B) ^ (A v C))', () => {
+      expect(cnf.distribute(ast('(A v (B ^ C))'))).toEqual(ast('((A v B) ^ (A v C))'))
+    })
+    
+    it('((A ^ B) v C) should be ((A v C) ^ (B v C))', () => {
+      expect(cnf.distribute(ast('((A ^ B) v C)'))).toEqual(ast('((A v C) ^ (B v C))'))
+    })
   })
 
   const assert = (actual, expected) => {
