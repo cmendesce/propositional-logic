@@ -1,20 +1,3 @@
-/*
-passo1: elimine o conectivo → usando: 
-α → β ≡ (¬α ∨ β)
-¬(α → β) ≡ (α ∧ ¬β)
-
-passo 2: mova a negação (¬) para o interior da fórmula, usando as seguintes regras: 
-¬¬α ≡ α
-¬(α ∧ β) ≡ (¬α ∨ ¬β)
-¬(α ∨ β) ≡ (¬α ∧ ¬β)
-
-passo3: mova as conjunções para o exterior da fórmula usando:
-
-α ∨ (β ∧ γ) ≡ (α ∨ β) ∧ (α ∨ γ)
-(α ∧ β) ∨ γ ≡ (α ∨ γ) ∧ (β ∨ γ)
-
-*/
-
 'use strict'
 
 describe('CNF: ', () => {
@@ -26,13 +9,13 @@ describe('CNF: ', () => {
 
   describe('Basic', () => {
     it('P should be P', () => {
-      expect(cnf.convert(ast('(P)'))).toEqual(ast('(P)'))
+      expect(cnf.convert('(P)')).toEqual(ast('(P)'))
     })
     it('(P ^ Q) should be (P ^ Q)', () => {
-      expect(cnf.convert(ast('(P ^ Q)'))).toEqual(ast('(P ^ Q)'))
+      expect(cnf.convert('(P ^ Q)')).toEqual(ast('(P ^ Q)'))
     })
     it('(P ^ Q) v (A ^ B) should be (P ^ Q) v (A ^ B)', () => {
-      expect(cnf.convert(ast('(P ^ Q) v (A ^ B)'))).toEqual(ast('(P ^ Q) v (A ^ B)'))
+      expect(cnf.convert('(P ^ Q) v (A ^ B)')).toEqual(ast('(P ^ Q) v (A ^ B)'))
     })
 
     it('null', () => {
@@ -40,6 +23,10 @@ describe('CNF: ', () => {
       expect(cnf.removeImplies(undefined)).toBeNull()
       expect(cnf.fixNegations(undefined)).toBeNull()
       expect(cnf.distribute(undefined)).toBeNull()
+    })
+
+    it('((A ∨ B) -> C) should be ((~A v C) ^ (~B ∨ C))', () => {
+      expect(cnf.convert('((A v B) -> C)')).toEqual(ast('((~A v C) ^ (~B v C))'))
     })
   })
 
@@ -71,6 +58,8 @@ describe('CNF: ', () => {
     it ('((P -> Q) -> (P -> R)) should be (~(~P v Q) v (~P v R))', () => {
       expect(cnf.removeImplies(ast('((P -> Q) -> (P -> R))'))).toEqual(ast('(~(~P v Q) v (~P v R))'))
     })
+
+    
 
     // it ('(~(P -> Q) -> (P -> R)) should be ((~P v Q) ^ ~(~P v R))', () => {
     //   expect(cnf.removeImplies(ast('(~(P -> Q) -> (P -> R))'))).toEqual(ast('((~P v Q) ^ ~(~P v R))'))
@@ -149,13 +138,13 @@ describe('CNF: ', () => {
     it('(A v (B ^ C)) should be ((A v B) ^ (A v C))', () => {
       expect(cnf.distribute(ast('(A v (B ^ C))'))).toEqual(ast('((A v B) ^ (A v C))'))
     })
-    
+
     it('((A ^ B) v C) should be ((A v C) ^ (B v C))', () => {
       expect(cnf.distribute(ast('((A ^ B) v C)'))).toEqual(ast('((A v C) ^ (B v C))'))
     })
-  })
 
-  const assert = (actual, expected) => {
-    expect(cnf.convert(ast('~(A v B)'))).toEqual(ast('(~A ^ ~B)'))
-  }
+    it('((~A ^ ~B) v C) should be ((~A v C) ^ (~B v C))', () => {
+      expect(cnf.distribute(ast('((~A ^ ~B) v C)'))).toEqual(ast('((~A v C) ^ (~B v C))'))
+    })
+  })
 })

@@ -3,7 +3,7 @@
 
 const token = require('../app/token'), 
 	tokenType = require('../app/tokenType').Type, 
-	ast = require('../app/ast.js'), 
+	ast = require('../app/ast').get, 
 	astType = require('../app/astType').AstType,
 	formula = require('../app/formula'),
 	or = formula.or, 
@@ -13,20 +13,20 @@ const token = require('../app/token'),
 const convert = (exp) => {
 	if (!exp) return null
 
-	const root = ast.get(exp)
-
-	const noImplies = removeImplies(exp);
-	const fixedNegations = fixNegations(noImplies);
+	const root = ast(exp)
 	
-	return fixedNegations;
+	const step1 = removeImplies(root)
+	const step2 = fixNegations(step1)
+	const step3 = distribute(step2)
+
+	return step3
 };
 
 //passo 1 
 const removeImplies = (root) => {
 	if (!root) return null;
 
-	if (root.type === astType.BINARY) {
-		
+	if (root.type === astType.BINARY) {		
 		if (root.token.type === tokenType.IMPLIES) {
 			const a = removeImplies(root.children[0])
 			const b = removeImplies(root.children[1])
