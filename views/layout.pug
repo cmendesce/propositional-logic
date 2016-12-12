@@ -18,12 +18,15 @@ html
         span
       div(id='menu')
         div(class='pure-menu')
-          a(class='pure-menu-heading', href='#') P-L Tools
+          a(class='pure-menu-heading', href='#') PL Tools
+          mixin item(text, link)
+            li(class='pure-menu-item')
+              a(class='pure-menu-link', href=link)=text
           ul(class='pure-menu-list')
-            li(class='pure-menu-item')
-              a(class='pure-menu-link', href='/') Home
-            li(class='pure-menu-item')
-              a(class='pure-menu-link', href='/about') About
+            +item('Home', '/')
+            +item('About', '/about')
+            +item('Abstract Syntax Tree', '/ast')
+            +item('Conjuntive Normal Form', '/cnf')
       div(id='main')
         div(class='header')
           h1=title
@@ -32,3 +35,4 @@ html
         div(class='content')
           block content
   script(src='/javascripts/ui.js')
+  block scripts
