@@ -28,6 +28,10 @@ describe('CNF: ', () => {
     it('((A ∨ B) -> C) should be ((~A v C) ^ (~B ∨ C))', () => {
       expect(cnf.convert('((A v B) -> C)')).toEqual(ast('((~A v C) ^ (~B v C))'))
     })
+
+    // it('(((P -> Q) -> P) -> P) should be (((~P v Q) ^ ~P) v P)', () => {
+      // expect(cnf.convert('(((P -> Q) -> P) -> P)')).toEqual(ast('(((~P v Q) ^ ~P) v P)'))
+    // })
   })
 
   describe('Remove implies', () => {
@@ -54,18 +58,10 @@ describe('CNF: ', () => {
     it ('((P -> Q) ^ (P -> R)) should be ((~P v Q) ^ (~P v R))', () => {
       expect(cnf.removeImplies(ast('((P -> Q) ^ (P -> R))'))).toEqual(ast('((~P v Q) ^ (~P v R))'))
     })
-
+    
     it ('((P -> Q) -> (P -> R)) should be (~(~P v Q) v (~P v R))', () => {
       expect(cnf.removeImplies(ast('((P -> Q) -> (P -> R))'))).toEqual(ast('(~(~P v Q) v (~P v R))'))
     })
-
-    
-
-    // it ('(~(P -> Q) -> (P -> R)) should be ((~P v Q) ^ ~(~P v R))', () => {
-    //   expect(cnf.removeImplies(ast('(~(P -> Q) -> (P -> R))'))).toEqual(ast('((~P v Q) ^ ~(~P v R))'))
-    // })
-
-    // ~(a )
   })
 
   describe('Fix negations', () => {
