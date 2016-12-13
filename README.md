@@ -1,6 +1,6 @@
 # Propositional Logic Compiler
 
-[![CircleCI](https://circleci.com/gh/cmendesce/propositional-logic-compiler.svg?style=svg)](https://circleci.com/gh/cmendesce/propositional-logic-compiler) [![Heroku](https://heroku-badge.herokuapp.com/?app=logic-compiler)](https://pl-tools.herokuapp.com/)
+[![CircleCI](https://circleci.com/gh/cmendesce/propositional-logic-tools.svg?style=svg)](https://circleci.com/gh/cmendesce/propositional-logic-compiler) [![Heroku](https://heroku-badge.herokuapp.com/?app=logic-compiler)](https://pl-tools.herokuapp.com/)
 
 This is a small application for compiler expressions written in propositional logic syntax. 
 
