@@ -19,9 +19,10 @@ const convert = (exp) => {
 	const step2 = fixNegations(step1)
 	const step3 = distribute(step2)
 
-	return {
+	/*return {
 		steps: [step1, step2, step3]
-	}
+	}*/
+	return step3
 }
 
 //passo 1 
