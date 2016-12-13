@@ -1,31 +1,30 @@
 {
-  "name": "propositional-logic",
-  "version": "0.0.2",
-  "description": "This is a small application for compiler expressions written in propositional logic syntax.",
-  "main": "server.js",
-  "scripts": {
-    "test": "./node_modules/jasmine-node/bin/jasmine-node --verbose spec",
-    "start": "node server"
-  },
+  "name": "pl-tools",
+  "description": "This is a small application for analizer expressions written in propositional logic syntax.",
+  "version": "0.2.0",
+  "private": false,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cmendesce/propositional-logic-compiler.git"
+    "url": "git+https://github.com/cmendesce/propositional-logic-tools.git"
   },
   "author": "Carlos Mendes",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/cmendesce/propositional-logic-compiler/issues"
+  "scripts": {
+    "start": "node ./bin/www",
+    "test": "./node_modules/jasmine-node/bin/jasmine-node --verbose spec"
   },
-  "homepage": "https://github.com/cmendesce/propositional-logic-compiler#readme",
   "dependencies": {
-    "body-parser": "^1.15.2",
-    "express": "^4.14.0",
-    "jasmine": "^2.5.0",
-    "jasmine-node": "^1.14.5",
-    "morgan": "^1.7.0",
-    "nodemon": "^1.10.2"
+    "body-parser": "~1.15.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.2.0",
+    "express": "~4.14.0",
+    "morgan": "~1.7.0",
+    "pug": "~2.0.0-beta6",
+    "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
-    "eslint": "^3.11.1"
+    "eslint": "^3.11.1",
+    "jasmine": "^2.5.0",
+    "jasmine-node": "^1.14.5"
   }
 }

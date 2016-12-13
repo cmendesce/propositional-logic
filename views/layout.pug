@@ -1,0 +1,41 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='https://unpkg.com/purecss@0.6.0/build/pure-min.css')
+    link(rel="stylesheet" href="/stylesheets/style.css")
+    <!--[if lte IE 8]>
+      link(rel="stylesheet" href="/stylesheets/side-menu-old-ie.css")
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        link(rel="stylesheet" href="/stylesheets/side-menu.css")
+    <!--<![endif]-->
+    <!--[if lt IE 9]>
+        script(src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js")
+    <![endif]-->
+  body
+    div(id='layout')
+      a(target='_blank', href='https://github.com/cmendesce/propositional-logic-tools.git')
+        img(style='position: absolute; top: 0; right: 0; border: 0;', src='https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67', alt='Fork me on GitHub', data-canonical-src='https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png')
+      a(id='menuLink' class='menu-link' href='#menu')
+        span
+      div(id='menu')
+        div(class='pure-menu')
+          a(class='pure-menu-heading', href='/') (P → L) TOOLS 
+          mixin item(text, link)
+            li(class='pure-menu-item')
+              a(class='pure-menu-link', href=link)=text
+          ul(class='pure-menu-list')
+            +item('Home', '/')
+            +item('About', '/about')
+            +item('Abstract Syntax Tree', '/ast/index')
+            +item('Conjuntive Normal Form', '/cnf/index')
+      div(id='main')
+        div(class='header')
+          h1=title
+          if subtitle !== ''
+            h2= subtitle
+        div(class='content')
+          block content
+  script(src='/javascripts/ui.js')
+  block scripts
