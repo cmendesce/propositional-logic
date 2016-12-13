@@ -14,16 +14,4 @@ router.get('/', (req, res, next) => {
 router.get('/about', (req, res, next) => {
   res.render('about', { title: 'About', subtitle: 'About proposicional logic tools' })
 })
-
-router.get('/ast', (req, res, next) => {
-  res.render('ast', { title: 'Abtract Syntax Tree', subtitle: 'About proposicional logic tools' })
-})
-
-router.get('/:expression', (request, response) => {
-  const expression = request.params.expression
-  const tree = ast.get(expression)
-
-  response.status(200).set('Content-Type', 'application/json').send(tree)
-})
-
 module.exports = router

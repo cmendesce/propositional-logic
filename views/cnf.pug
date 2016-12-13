@@ -1,0 +1,41 @@
+extends layout
+
+block content
+  div(class='content')
+    p
+      strong Conjunctive Normal Form 
+      | is a tree representation of the 
+    p
+      | 1 - Remove all implies: 
+      br
+      strong (α → β) ≡ (~α v β)
+      br
+      strong ~(α → β) ≡ (α ^ ~β)
+    p 
+      | 2 - Move the negation (~) to the inside of formula:
+      br 
+      strong ~(~α) ≡ α
+      br
+      strong ~(α ^ β) ≡ (~α v ~β)
+      br
+      strong ~(α v β) ≡ (~α ^ ~β)
+    p
+      | 3 - mova as conjunções para o exterior da fórmula usando:
+      br
+      strong α v (β ^ γ) ≡ (α v β) ^ (α v γ)
+      br
+      strong (α ^ β) v γ ≡ (α v γ) ^ (β v γ)  
+    
+    div(class='pure-form')
+      fieldset
+          legend View the CNF from an expression
+          div(class='control-group')
+            label(for="expression") Expression
+            input(type='text', placeholder='((P -> Q) ^ A)', id='expressionText')
+            button(id='btnEvaluate', type="submit" class="pure-button pure-button-primary") Evaluate
+    div(id='chart_div')
+block scripts
+  script(src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous")
+  script(src="https://www.gstatic.com/charts/loader.js")
+  script(Src='/javascripts/tree.js')
+  script(Src='/javascripts/cnf.js')

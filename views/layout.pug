@@ -3,6 +3,7 @@ html
   head
     title= title
     link(rel='stylesheet', href='https://unpkg.com/purecss@0.6.0/build/pure-min.css')
+    link(rel="stylesheet" href="/stylesheets/style.css")
     <!--[if lte IE 8]>
       link(rel="stylesheet" href="/stylesheets/side-menu-old-ie.css")
     <![endif]-->
@@ -20,15 +21,15 @@ html
         span
       div(id='menu')
         div(class='pure-menu')
-          a(class='pure-menu-heading', href='#') (P → L) TOOLS 
+          a(class='pure-menu-heading', href='/') (P → L) TOOLS 
           mixin item(text, link)
             li(class='pure-menu-item')
               a(class='pure-menu-link', href=link)=text
           ul(class='pure-menu-list')
             +item('Home', '/')
             +item('About', '/about')
-            +item('Abstract Syntax Tree', '/ast')
-            +item('Conjuntive Normal Form', '/cnf')
+            +item('Abstract Syntax Tree', '/ast/index')
+            +item('Conjuntive Normal Form', '/cnf/index')
       div(id='main')
         div(class='header')
           h1=title

@@ -19,8 +19,10 @@ const convert = (exp) => {
 	const step2 = fixNegations(step1)
 	const step3 = distribute(step2)
 
-	return step3
-};
+	return {
+		steps: [step1, step2, step3]
+	}
+}
 
 //passo 1 
 const removeImplies = (root) => {
@@ -55,7 +57,7 @@ const removeImplies = (root) => {
 		}
 		return root;
 	}
-};
+}
 
 // passo 2
 const fixNegations = (root) => {
@@ -105,7 +107,7 @@ const fixNegations = (root) => {
 	}
 
 	return root
-};
+}
 
 const distribute = (root) => {
 	if (!root) return null

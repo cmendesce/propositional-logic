@@ -2,8 +2,24 @@ extends layout
 
 block content
   div(class='content')
-    h2(class='content-subhead') Get the
-
+    p
+      strong Abstract Syntax Tree 
+      | is a tree representation of the abstract syntactic structure of source 
+      | code written in a programming language, in this case proposicional logic language. 
+      | Each node of the tree denotes a construct occurring in the source code. 
+      small
+        a(target='_blank', href='https://en.wikipedia.org/wiki/Abstract_syntax_tree') [1] Wikipedia  
+    
+    div(class='pure-form')
+      fieldset
+          legend Generate an AST from an expression
+          div(class='control-group')
+            label(for="expression") Expression
+            input(type='text', placeholder='((P -> Q) ^ A)', id='expressionText')
+            button(id='btnEvaluate', type="submit" class="pure-button pure-button-primary") Evaluate
+    div(id='chart_div')
 block scripts
   script(src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous")
   script(src="https://www.gstatic.com/charts/loader.js")
+  script(Src='/javascripts/tree.js')
+  script(Src='/javascripts/ast.js')
