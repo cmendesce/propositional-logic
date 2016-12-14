@@ -3,28 +3,28 @@ extends layout
 block content
   div(class='content')
     p
-      strong Conjunctive Normal Form 
+      strong=title 
       | is a tree representation of the 
     p
       | 1 - Remove all implies: 
       br
-      strong (α → β) ≡ (~α v β)
+      strong (A -> B) ≡ (~A v B)
       br
-      strong ~(α → β) ≡ (α ^ ~β)
+      strong ~(A -> B) ≡ (A ^ ~B)
     p 
       | 2 - Move the negation (~) to the inside of formula:
       br 
-      strong ~(~α) ≡ α
+      strong ~(~A) ≡ A
       br
-      strong ~(α ^ β) ≡ (~α v ~β)
+      strong ~(A ^ B) ≡ (~A v ~B)
       br
-      strong ~(α v β) ≡ (~α ^ ~β)
+      strong ~(A v B) ≡ (~A ^ ~B)
     p
       | 3 - mova as conjunções para o exterior da fórmula usando:
       br
-      strong α v (β ^ γ) ≡ (α v β) ^ (α v γ)
+      strong A v (B ^ γ) ≡ (A v B) ^ (A v γ)
       br
-      strong (α ^ β) v γ ≡ (α v γ) ^ (β v γ)  
+      strong (A ^ B) v γ ≡ (A v γ) ^ (B v γ)  
     
     div(class='pure-form')
       fieldset
@@ -33,7 +33,17 @@ block content
             label(for="expression") Expression
             input(type='text', placeholder='((P -> Q) ^ A)', id='expressionText')
             button(id='btnEvaluate', type="submit" class="pure-button pure-button-primary") Evaluate
-    div(id='chart_div')
+    
+    div(id='results', class='pure-form', style='display: none; border: 1px solid #e5e5e5; padding: 8px')
+      div
+        fieldset
+          legend=title 
+          p(id='cnf')
+      div
+        fieldset
+          legend Abstract Syntax Tree
+          div(id='chart_div')
+
 block scripts
   script(src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous")
   script(src="https://www.gstatic.com/charts/loader.js")
