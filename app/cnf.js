@@ -3,7 +3,7 @@
 
 const token = require('../app/token'), 
 	tokenType = require('../app/tokenType').Type, 
-	ast = require('../app/ast').get, 
+	ast = require('../app/ast'), 
 	astType = require('../app/astType').AstType,
 	formula = require('../app/formula'),
 	or = formula.or, 
@@ -13,16 +13,17 @@ const token = require('../app/token'),
 const convert = (exp) => {
 	if (!exp) return null
 
-	const root = ast(exp)
+	const root = ast.get(exp)
 	
 	const step1 = removeImplies(root)
 	const step2 = fixNegations(step1)
 	const step3 = distribute(step2)
 
-	/*return {
-		steps: [step1, step2, step3]
-	}*/
-	return step3
+	return {
+		steps: [step1, step2, step3],
+		tree: step3,
+		expression: ast.stringify(step3)
+	}
 }
 
 //passo 1 
@@ -137,21 +138,3 @@ module.exports = {
 	fixNegations: fixNegations,
 	distribute: distribute
 }
-
-/*
-passo1: elimine o conectivo → usando: 
-α → β ≡ (¬α ∨ β)
-¬(α → β) ≡ (α ∧ ¬β)
-
-passo 2: mova a negação (¬) para o interior da fórmula, usando as seguintes regras: 
-¬¬α ≡ α
-¬(α ∧ β) ≡ (¬α ∨ ¬β)
-¬(α ∨ β) ≡ (¬α ∧ ¬β)
-
-passo3: mova as conjunções para o exterior da fórmula usando:
-α ∨ (β ∧ γ) ≡ (α ∨ β) ∧ (α ∨ γ)
-(α ∧ β) ∨ γ ≡ (α ∨ γ) ∧ (β ∨ γ)
-
-Exemplo:
-(A∨B)→C⇒ passo1 ⇒¬(A∨B)∨C⇒ passo2 ⇒ (¬A∧¬B)∨C ⇒ passo3 ⇒(¬A∨C)∧(¬B∨C)FNC
-*/

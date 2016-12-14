@@ -9,13 +9,13 @@ describe('CNF: ', () => {
 
   describe('Basic', () => {
     it('P should be P', () => {
-      expect(cnf.convert('(P)')).toEqual(ast('(P)'))
+      expect(cnf.convert('(P)').tree).toEqual(ast('(P)'))
     })
     it('(P ^ Q) should be (P ^ Q)', () => {
-      expect(cnf.convert('(P ^ Q)')).toEqual(ast('(P ^ Q)'))
+      expect(cnf.convert('(P ^ Q)').tree).toEqual(ast('(P ^ Q)'))
     })
     it('(P ^ Q) v (A ^ B) should be (P ^ Q) v (A ^ B)', () => {
-      expect(cnf.convert('(P ^ Q) v (A ^ B)')).toEqual(ast('(P ^ Q) v (A ^ B)'))
+      expect(cnf.convert('(P ^ Q) v (A ^ B)').tree).toEqual(ast('(P ^ Q) v (A ^ B)'))
     })
 
     it('null', () => {
@@ -26,7 +26,7 @@ describe('CNF: ', () => {
     })
 
     it('((A ∨ B) -> C) should be ((~A v C) ^ (~B ∨ C))', () => {
-      expect(cnf.convert('((A v B) -> C)')).toEqual(ast('((~A v C) ^ (~B v C))'))
+      expect(cnf.convert('((A v B) -> C)').tree).toEqual(ast('((~A v C) ^ (~B v C))'))
     })
 
     // it('(((P -> Q) -> P) -> P) should be (((~P v Q) ^ ~P) v P)', () => {

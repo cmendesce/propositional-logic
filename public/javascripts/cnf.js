@@ -8,7 +8,9 @@ function evaluate() {
     dataType: 'json',
     success: function(data) {
       var tree = new Tree();
-      tree.generate(data);
+      tree.generate(data.tree);
+      $('#cnf').text(data.expression)
+      $('#results').show()
     },
     error: function() {
       $('#expressionTitle').text(expression);

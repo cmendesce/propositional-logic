@@ -4,7 +4,7 @@ const tokenType = require('../app/tokenType.js').Type
     , astType = require('../app/astType.js').AstType
 
 exports.simple = {
-  '(~P)': {
+  '~P': {
     type: astType.UNARY,
     token: {type: tokenType.NOT, value: '~'},
     children: [
@@ -13,7 +13,7 @@ exports.simple = {
       }
     ]
   },
-  '(P)': {
+  'P': {
     type: astType.PROP,
     token: {type: tokenType.PREMISE, value: 'P'}
   }
@@ -73,7 +73,7 @@ exports.twoPremise = {
 }
 
 exports.hard = {
-  '((A->B)->((A->(B->C)))->(A->C))':
+  '(((A->B)->(A->(B->C)))->(A->C))':
   {
      type: 'BINARY',
      token:{type:'IMPLIES', value:'->'},
