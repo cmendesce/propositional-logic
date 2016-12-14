@@ -48,6 +48,12 @@ describe('AST: ', () => {
         expect(ast.stringify(tree)).toEqual(exp)
       }
     })
+
+    it('should transform (((~A ^ ~B) v C) -> D)', () => {
+      const exp = '(((~A^~B)vC)->D)'
+      const tree = ast.get(exp)
+      expect(ast.stringify(tree)).toEqual(exp)
+    })
     
   })
 })

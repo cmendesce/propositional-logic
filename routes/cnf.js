@@ -11,8 +11,8 @@ router.get('/index', (req, res, next) => {
 
 router.get('/:expression', (req, res, next) => {
   const expression = req.params.expression
-  const tree = cnf.convert(expression)
-  res.status(200).set('Content-Type', 'application/json').send(tree)
+  const result = cnf.convert(expression)
+  res.status(200).set('Content-Type', 'application/json').send(result)
 })
 
 module.exports = router

@@ -18,11 +18,15 @@ const convert = (exp) => {
 	const step1 = removeImplies(root)
 	const step2 = fixNegations(step1)
 	const step3 = distribute(step2)
-
+	
 	return {
-		steps: [step1, step2, step3],
-		tree: step3,
-		expression: ast.stringify(step3)
+		steps: [
+			{ expression: ast.stringify(step1), tree: step1 },
+			{ expression: ast.stringify(step2), tree: step2 },
+			{ expression: ast.stringify(step3), tree: step3 }
+	],
+	result: 
+		{ expression: ast.stringify(step3), tree: step3 }
 	}
 }
 
