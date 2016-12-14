@@ -10,12 +10,12 @@ const token = require('../app/token'),
 const stringify = (root) => {
 	
 	if (has(root.children)) {
+		const a = root.children[0]
 		if (root.type === astType.UNARY) {
-			if (root.children[0].type === astType.PROP) {
-				return root.token.value + root.children[0].token.value 
+			if (a.type === astType.PROP) {
+				return root.token.value + a.token.value 
 			}
 		} else {
-			const a = root.children[0]
 			const b = root.children[1]
 			return `(${stringify(a)}${root.token.value}${stringify(b)})`
 		}
