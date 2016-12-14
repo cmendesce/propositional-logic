@@ -2,14 +2,31 @@
 
 var exports = module.exports = { }
 
-const token = require('../app/token.js')
-		, tokenizer = require('../app/tokenizer.js')
-		, tokenType = require('../app/tokenType.js').Type
-		, astType = require('../app/astType.js').AstType
+const token = require('../app/token'),
+	tokenizer = require('../app/tokenizer'),
+	tokenType = require('../app/tokenType').Type,
+	astType = require('../app/astType').AstType
 
-exports.get = get
+const stringify = (root) => {
+	
+	if (has(root.children)) {
+		if (root.type === astType.UNARY) {
+			if (root.children[0].type === astType.PROP) {
+				return root.token.value + root.children[0].token.value 
+			}
+		} else {
+			const a = root.children[0]
+			const b = root.children[1]
+			return `(${stringify(a)}${root.token.value}${stringify(b)})`
+		}
+	} else {
+		return root.token.value
+	}
+}
 
-function get(expression) {
+const has = (children) => !!children && children.length > 0
+
+const get = (expression) => {
 	const tokens = tokenizer.get(expression)
 	let _current = 0
 	let last
@@ -57,4 +74,9 @@ function get(expression) {
 				return null;
 		}
 	}
+}
+
+module.exports = {
+	get: get, 
+	stringify: stringify
 }
