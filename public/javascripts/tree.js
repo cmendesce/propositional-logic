@@ -22,10 +22,12 @@ var Tree = function() {
       for (var i = 0; i < node.children.length; i++) {
         index++;
         var child = node.children[i];
-        var row = [tokenString(child.token, index), parent]
-        data.addRows([row]);
-        if (!!child.children) {
-          deep(data, child, index);
+        if (child) {
+          var row = [tokenString(child.token, index), parent]
+          data.addRows([row]);
+          if (!!child.children) {
+            deep(data, child, index);
+          }
         }
       }
     }
