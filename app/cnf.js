@@ -8,6 +8,7 @@ const token = require('../app/token'),
 	formula = require('../app/formula'),
 	or = formula.or, 
 	and = formula.and,
+	prop = formula.prop,
 	not = formula.not;
 
 const convert = (exp) => {
@@ -111,26 +112,72 @@ const fixNegations = (root) => {
 	return root
 }
 
-const distribute = (root) => {
+const rebuild = (root, p) => {
+
 	if (!root) return null
-
-	if (root.token.type === tokenType.OR) {
-		const a = root.children[0]
-		const b = root.children[1]
-
-		if (a.type === astType.PROP && b.token.type === tokenType.AND) { // * v (P ^ Q)
-			const conjunction = b.children
-			return and(or(a, conjunction[0]), or(a, conjunction[1]))
-		} else if (a.token.type === tokenType.AND && b.type === astType.PROP) {
-			const conjunction = a.children
-			return and(or(conjunction[0], b), or(conjunction[1], b))
-		}
-	}
 	
-	return root;
+	if (has(root.children)) {
+
+		for (let i=0; i <= root.children.length; i++) {
+			
+			if (!!root.children[i]) {
+				if (root.children[i].token.value === 'TEMP') {
+					root.children[i] = p
+				} else {
+					root.children[i] = rebuild(root.children[i], p)
+				}
+			}
+		}
+		
+	}
+	return root
 }
 
-const has = (children) => !!children && children.length > 0
+const distribute = root => {
+  
+	//   ((A ^ B) v (C ^ D))
+	//   ((A v C) ^ (B v C) ^ (A v D) ^ (B v D))
+	if (!root) return null
+
+	if (is(root, tokenType.OR)) {
+
+		if (is(root.children[0], tokenType.AND) && is(root.children[1], tokenType.AND)) {
+
+			const p = root.children[0] // P = (A ^ B)
+			const temp = distribute(or(prop('TEMP'), root.children[1])) // (P v C) ^ (P v D)
+			
+			const left = temp.children[0] // (P v C)
+			const right = temp.children[1] // (P v D)
+			left.children[0] = p // (A ^ B) v C
+			right.children[0] = p // (A ^ B) v D
+
+			return and(distribute(left), distribute(right))
+		}
+
+		if (is(root.children[1], tokenType.AND)) { // A v (B ^ C) <--> (A v B) ^ (A v C)
+
+			const a = distribute(root.children[0])
+			const b = distribute(root.children[1].children[0])
+			const c = distribute(root.children[1].children[1])
+
+			return distribute(and(or(a, b), or(a, c)))
+		}
+
+		if (is(root.children[0], tokenType.AND)) { // (A ^ B) v C <--> (A v C) ^ (B v C)
+				const a = distribute(root.children[0].children[0])
+				const b = distribute(root.children[0].children[1])
+				const c = distribute(root.children[1])
+				
+				return distribute(and(or(a, c), or(b, c)))
+		}
+	}
+
+	return root
+}
+
+const has = children => !!children && children.length > 0
+
+const is = (root, tType) => root.token.type === tType
 
 module.exports = {
 	convert: convert,
