@@ -35,9 +35,17 @@ const implies = (left, right) => {
 	}
 }
 
+const prop = (premise) => {
+	return {
+		type: astType.PROP,
+		token: {type: tokenType.PREMISE, value: premise}
+	}
+}
+
 module.exports = {
 	implies: implies,
 	and: and,
 	or: or, 
-	not: not
+	not: not,
+	prop: prop
 }
