@@ -18,7 +18,7 @@ const getClauses = premises =>
   premises.filter(p => !!p).map(a => resolution.generateClauses(cnf(a).tree)).reduce((a, b) => a.concat(b))
 
 
-const calls = [] // calls of p1 in p2
+let calls = [] // calls of p1 in p2
 const isCalled = (a, b) =>
   calls.filter(e => (e[0] === a && e[1] === b) || (e[0] === b && e[1] === a)).length > 0
 const registerCall = (a, b) => calls.push([a, b])
@@ -69,6 +69,7 @@ const proof = (question, premises) => {
 	  }
   }
 
+  calls = []
   return {
     solved: solved,
     clauses: clauses,
