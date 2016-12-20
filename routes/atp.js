@@ -14,11 +14,8 @@ router.get('/index', (req, res, next) => {
 router.post('/prove', (req, res, next) => {
   const question = req.body.question
   const premises = req.body.premises.split(',')
-  console.log(question)
-  console.log(premises)
   const result = proof(question, premises)
-
-  console.dir(result, {deep: null, color: true})
+  
   res.render('atp-result', 
     { title: 'Automatic Theorem Proving', 
       proof: {
