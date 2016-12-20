@@ -1,0 +1,7 @@
+instrumentation:
+    excludes: ['spec/**/*', 'app.js', 'server.js', 'public/javascripts/**/*', 'routes/*']
+    include-all-sources: true
+reporting:
+    reports:
+        - lcov
+        - cobertura

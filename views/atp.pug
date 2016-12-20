@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  div(class='content')
+    p
+      strong Automatic Theorem Proving 
+      | is a ... 
+    
+    form(class='pure-form pure-form-stacked', action='prove', method='POST')
+      fieldset
+          legend Give the premises and what should be proved
+          div(class='control-group')
+            label Premises 
+              small Comma separeted
+            input(type='text', placeholder='(P -> Q), (P v Q)', name='premises')
+          
+            label Expression
+            input(type='text', placeholder='(P ^ Q)', name='question')
+          button(id='btnEvaluate', type="submit" class="pure-button pure-button-primary") Prove
+    
+block scripts
+  script(src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous")
+  script(src="https://www.gstatic.com/charts/loader.js")

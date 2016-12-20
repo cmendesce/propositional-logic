@@ -1,0 +1,38 @@
+extends layout
+
+block content
+  br
+  a(class='pure-menu-link', href='/atp/index') < Back
+  div(class='content')
+    p Result of #{proof.question} ⊢ {#{proof.premises}}
+    
+    if proof
+      div(class="pure-g")
+        div(class="pure-u-1-2")
+          table(class="pure-table")
+            thead
+              tr
+                td #
+                td Clauses
+            tbody
+              each item, index in proof.clauses
+                tr
+                  td=index + 1
+                  td=item
+        div(class="pure-u-1-2")
+          table(class="pure-table")
+            thead
+              tr
+                td #
+                td Resolvent
+                td Clauses
+            tbody
+              each item, index in proof.resolvents
+                tr
+                  td=index + 1
+                  td=item.resolvent
+                  td (#{item.i}, #{item.j})
+block scripts
+  script(src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous")
+  script(src="https://www.gstatic.com/charts/loader.js")
+  script(src='/javascripts/tree.js')
